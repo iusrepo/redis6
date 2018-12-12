@@ -24,14 +24,14 @@
 
 # Commit IDs for the (unversioned) redis-doc repository
 # https://fedoraproject.org/wiki/Packaging:SourceURL "Commit Revision"
-%global doc_commit a59c016fabe113539731621c99d52ef0d656dbae
+%global doc_commit a1e79fc9b2f42f04a8ab59c05c3228931adcd0a6
 %global short_doc_commit %(c=%{doc_commit}; echo ${c:0:7})
 
 # %%{rpmmacrodir} not usable on EL-6
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:              redis
-Version:           5.0.2
+Version:           5.0.3
 Release:           1%{?dist}
 Summary:           A persistent key-value database
 # redis, linenoise, lzf, hiredis are BSD
@@ -60,7 +60,7 @@ Source10:          https://github.com/antirez/%{name}-doc/archive/%{doc_commit}/
 Patch0001:         0001-1st-man-pageis-for-redis-cli-redis-benchmark-redis-c.patch
 # https://github.com/antirez/redis/pull/3494 - symlink
 Patch0002:         0002-install-redis-check-rdb-as-a-symlink-instead-of-dupl.patch
-BuildRequires:  gcc
+BuildRequires:     gcc
 BuildRequires:     jemalloc-devel
 %if 0%{?with_tests}
 BuildRequires:     procps-ng
@@ -358,6 +358,9 @@ fi
 
 
 %changelog
+* Thu Dec 13 2018 Nathan Scott <nathans@redhat.com> - 5.0.3-1
+- Upstream 5.0.3 release and redis-doc updates.
+
 * Fri Nov 23 2018 Nathan Scott <nathans@redhat.com> - 5.0.2-1
 - Upstream 5.0.2 release and redis-doc updates.
 
