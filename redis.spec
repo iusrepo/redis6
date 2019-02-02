@@ -32,7 +32,7 @@
 
 Name:              redis
 Version:           5.0.3
-Release:           1%{?dist}
+Release:           2%{?dist}
 Summary:           A persistent key-value database
 # redis, linenoise, lzf, hiredis are BSD
 # lua is MIT
@@ -358,6 +358,9 @@ fi
 
 
 %changelog
+* Sat Feb 02 2019 Fedora Release Engineering <releng@fedoraproject.org> - 5.0.3-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
+
 * Thu Dec 13 2018 Nathan Scott <nathans@redhat.com> - 5.0.3-1
 - Upstream 5.0.3 release and redis-doc updates.
 
