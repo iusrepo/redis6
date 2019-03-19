@@ -1,18 +1,18 @@
-From 992c773e70462a6fbe1536e18e673c9ab55d5901 Mon Sep 17 00:00:00 2001
+From 85d847361b519dca524178e3197dbb0ed24e0cb5 Mon Sep 17 00:00:00 2001
 From: Remi Collet <fedora@famillecollet.com>
 Date: Fri, 9 Sep 2016 17:23:27 +0200
-Subject: [PATCH 2/2] install redis-check-rdb as a symlink instead of duplicating
- the binary
+Subject: [PATCH 2/2] install redis-check-rdb as a symlink instead of
+ duplicating the binary
 
 ---
  src/Makefile | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/src/Makefile b/src/Makefile
-index fdbe36a..c3083f8 100644
+index 2a68649..585c95b 100644
 --- a/src/Makefile
 +++ b/src/Makefile
-@@ -287,6 +287,6 @@ install: all
+@@ -307,9 +307,9 @@ install: all
  	$(REDIS_INSTALL) $(REDIS_SERVER_NAME) $(INSTALL_BIN)
  	$(REDIS_INSTALL) $(REDIS_BENCHMARK_NAME) $(INSTALL_BIN)
  	$(REDIS_INSTALL) $(REDIS_CLI_NAME) $(INSTALL_BIN)
@@ -21,6 +21,9 @@ index fdbe36a..c3083f8 100644
  	@ln -sf $(REDIS_SERVER_NAME) $(INSTALL_BIN)/$(REDIS_SENTINEL_NAME)
 +	@ln -sf $(REDIS_SERVER_NAME) $(INSTALL_BIN)/$(REDIS_CHECK_RDB_NAME)
 +	@ln -sf $(REDIS_SERVER_NAME) $(INSTALL_BIN)/$(REDIS_CHECK_AOF_NAME)
+ 
+ uninstall:
+ 	rm -f $(INSTALL_BIN)/{$(REDIS_SERVER_NAME),$(REDIS_BENCHMARK_NAME),$(REDIS_CLI_NAME),$(REDIS_CHECK_RDB_NAME),$(REDIS_CHECK_AOF_NAME),$(REDIS_SENTINEL_NAME)}
 -- 
-2.13.5
+2.20.1
 

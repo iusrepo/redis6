@@ -1,4 +1,4 @@
-From c7958ad1c0d615b81276ec2d4dbc1bf6a67dcc4d Mon Sep 17 00:00:00 2001
+From ae2235dab50c86480ee37f50119af6668f312ba3 Mon Sep 17 00:00:00 2001
 From: Remi Collet <fedora@famillecollet.com>
 Date: Thu, 8 Sep 2016 14:51:15 +0200
 Subject: [PATCH 1/2] 1st man pageis for - redis-cli - redis-benchmark -
@@ -7,12 +7,12 @@ Subject: [PATCH 1/2] 1st man pageis for - redis-cli - redis-benchmark -
 as redis-sentinel is a symlink to redis-server, same page can be used (also symlinked)
 redis.conf can also be used for sentinel.conf
 ---
- man/man1/redis-benchmark.1 | 132 ++++++++++++++++++++++++++++++++++
- man/man1/redis-check-aof.1 |  60 ++++++++++++++++
- man/man1/redis-check-rdb.1 |  53 ++++++++++++++
- man/man1/redis-cli.1       | 171 +++++++++++++++++++++++++++++++++++++++++++++
- man/man1/redis-server.1    | 117 +++++++++++++++++++++++++++++++
- man/man5/redis.conf.5      |  57 +++++++++++++++
+ man/man1/redis-benchmark.1 | 132 ++++++++++++++++++++++++++++
+ man/man1/redis-check-aof.1 |  60 +++++++++++++
+ man/man1/redis-check-rdb.1 |  53 ++++++++++++
+ man/man1/redis-cli.1       | 171 +++++++++++++++++++++++++++++++++++++
+ man/man1/redis-server.1    | 117 +++++++++++++++++++++++++
+ man/man5/redis.conf.5      |  57 +++++++++++++
  6 files changed, 590 insertions(+)
  create mode 100644 man/man1/redis-benchmark.1
  create mode 100644 man/man1/redis-check-aof.1
@@ -648,5 +648,5 @@ index 0000000..1e0c9c9
 +(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 +SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -- 
-2.13.5
+2.20.1
 

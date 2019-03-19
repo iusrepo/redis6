@@ -24,15 +24,15 @@
 
 # Commit IDs for the (unversioned) redis-doc repository
 # https://fedoraproject.org/wiki/Packaging:SourceURL "Commit Revision"
-%global doc_commit a1e79fc9b2f42f04a8ab59c05c3228931adcd0a6
+%global doc_commit 8c322492b0ad14067bd4cebce20f3509d989370d
 %global short_doc_commit %(c=%{doc_commit}; echo ${c:0:7})
 
 # %%{rpmmacrodir} not usable on EL-6
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:              redis
-Version:           5.0.3
-Release:           2%{?dist}
+Version:           5.0.4
+Release:           1%{?dist}
 Summary:           A persistent key-value database
 # redis, linenoise, lzf, hiredis are BSD
 # lua is MIT
@@ -358,6 +358,10 @@ fi
 
 
 %changelog
+* Tue Mar 19 2019 Nathan Scott <nathans@redhat.com> - 5.0.4-1
+- Upstream 5.0.4 release and redis-doc updates.
+- Fix sentinel.conf logfile line addition.
+
 * Sat Feb 02 2019 Fedora Release Engineering <releng@fedoraproject.org> - 5.0.3-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_30_Mass_Rebuild
 
