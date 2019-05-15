@@ -19,8 +19,8 @@
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:              redis
-Version:           5.0.4
-Release:           2%{?dist}
+Version:           5.0.5
+Release:           1%{?dist}
 Summary:           A persistent key-value database
 # redis, linenoise, lzf, hiredis are BSD
 # lua is MIT
@@ -279,6 +279,9 @@ exit 0
 
 
 %changelog
+* Thu May 16 2019 Nathan Scott <nathans@redhat.com> - 5.0.5-1
+- Upstream 5.0.5 release and redis-doc updates.
+
 * Sat May 11 2019 Nathan Scott <nathans@redhat.com> - 5.0.4-2
 - Obsolete redis-trib - functionality now in redis-cli(1)
 - Remove old chkconfig support, all systemd platforms now
