@@ -20,13 +20,13 @@
 
 Name:              redis
 Version:           5.0.5
-Release:           1%{?dist}
+Release:           2%{?dist}
 Summary:           A persistent key-value database
 # redis, linenoise, lzf, hiredis are BSD
 # lua is MIT
 License:           BSD and MIT
-URL:               http://redis.io
-Source0:           http://download.redis.io/releases/%{name}-%{version}.tar.gz
+URL:               https://redis.io
+Source0:           https://download.redis.io/releases/%{name}-%{version}.tar.gz
 Source1:           %{name}.logrotate
 Source2:           %{name}-sentinel.service
 Source3:           %{name}.service
@@ -49,7 +49,6 @@ Patch0001:         0001-1st-man-pageis-for-redis-cli-redis-benchmark-redis-c.pat
 # https://github.com/antirez/redis/pull/3494 - symlink
 Patch0002:         0002-install-redis-check-rdb-as-a-symlink-instead-of-dupl.patch
 BuildRequires:     gcc
-BuildRequires:     jemalloc-devel
 %if 0%{?with_tests}
 BuildRequires:     procps-ng
 BuildRequires:     tcl
@@ -65,6 +64,7 @@ Requires(post):    systemd
 Requires(preun):   systemd
 Requires(postun):  systemd
 Provides:          bundled(hiredis)
+Provides:          bundled(jemalloc)
 Provides:          bundled(lua-libs)
 Provides:          bundled(linenoise)
 Provides:          bundled(lzf)
@@ -123,17 +123,11 @@ administration and development.
 %setup -q -b 10
 %setup -q
 mv ../%{name}-doc-%{doc_commit} doc
-rm -frv deps/jemalloc
 %patch0001 -p1
 %patch0002 -p1
 
 mv deps/lua/COPYRIGHT    COPYRIGHT-lua
 mv deps/hiredis/COPYING  COPYING-hiredis
-
-# Use system jemalloc library
-sed -i -e '/cd jemalloc && /d' deps/Makefile
-sed -i -e 's|../deps/jemalloc/lib/libjemalloc.a|-ljemalloc -ldl|g' src/Makefile
-sed -i -e 's|-I../deps/jemalloc.*|-DJEMALLOC_NO_DEMANGLE -I/usr/include/jemalloc|g' src/Makefile
 
 # Configuration file changes
 sed -i -e 's|^logfile .*$|logfile /var/log/redis/redis.log|g' redis.conf
@@ -148,8 +142,7 @@ if test "$api" != "%{redis_modules_abi}"; then
    exit 1
 fi
 
-%global malloc_flags	MALLOC=jemalloc
-%global make_flags	DEBUG="" V="echo" LDFLAGS="%{?__global_ldflags}" CFLAGS+="%{optflags} -fPIC" %{malloc_flags} INSTALL="install -p" PREFIX=%{buildroot}%{_prefix}
+%global make_flags	DEBUG="" V="echo" LDFLAGS="%{?__global_ldflags}" CFLAGS+="%{optflags} -fPIC" INSTALL="install -p" PREFIX=%{buildroot}%{_prefix}
 
 %build
 make %{?_smp_mflags} %{make_flags} all
@@ -279,6 +272,9 @@ exit 0
 
 
 %changelog
+* Mon Jul 15 2019 Nathan Scott <nathans@redhat.com> - 5.0.5-2
+- Use the (modified) bundled jemalloc for defrag (RHBZ #1725852)
+
 * Thu May 16 2019 Nathan Scott <nathans@redhat.com> - 5.0.5-1
 - Upstream 5.0.5 release and redis-doc updates.
 
