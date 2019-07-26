@@ -20,7 +20,7 @@
 
 Name:              redis
 Version:           5.0.5
-Release:           2%{?dist}
+Release:           3%{?dist}
 Summary:           A persistent key-value database
 # redis, linenoise, lzf, hiredis are BSD
 # lua is MIT
@@ -272,6 +272,9 @@ exit 0
 
 
 %changelog
+* Fri Jul 26 2019 Fedora Release Engineering <releng@fedoraproject.org> - 5.0.5-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
+
 * Mon Jul 15 2019 Nathan Scott <nathans@redhat.com> - 5.0.5-2
 - Use the (modified) bundled jemalloc for defrag (RHBZ #1725852)
 
