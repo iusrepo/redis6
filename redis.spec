@@ -12,15 +12,15 @@
 
 # Commit IDs for the (unversioned) redis-doc repository
 # https://fedoraproject.org/wiki/Packaging:SourceURL "Commit Revision"
-%global doc_commit 8c322492b0ad14067bd4cebce20f3509d989370d
+%global doc_commit 685cc5a4d323203d8e1eb85de3adc47830687207
 %global short_doc_commit %(c=%{doc_commit}; echo ${c:0:7})
 
 # %%{rpmmacrodir} not usable on EL-6
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:              redis
-Version:           5.0.5
-Release:           2%{?dist}
+Version:           5.0.6
+Release:           1%{?dist}
 Summary:           A persistent key-value database
 # redis, linenoise, lzf, hiredis are BSD
 # lua is MIT
@@ -272,6 +272,9 @@ exit 0
 
 
 %changelog
+* Thu Sep 26 2019 Nathan Scott <nathans@redhat.com> - 5.0.6-1
+- Upstream 5.0.6 release and redis-doc updates.
+
 * Mon Jul 15 2019 Nathan Scott <nathans@redhat.com> - 5.0.5-2
 - Use the (modified) bundled jemalloc for defrag (RHBZ #1725852)
 
