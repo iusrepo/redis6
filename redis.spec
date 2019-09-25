@@ -275,6 +275,9 @@ exit 0
 * Thu Sep 26 2019 Nathan Scott <nathans@redhat.com> - 5.0.6-1
 - Upstream 5.0.6 release and redis-doc updates.
 
+* Fri Jul 26 2019 Fedora Release Engineering <releng@fedoraproject.org> - 5.0.5-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_31_Mass_Rebuild
+
 * Mon Jul 15 2019 Nathan Scott <nathans@redhat.com> - 5.0.5-2
 - Use the (modified) bundled jemalloc for defrag (RHBZ #1725852)
 
