@@ -12,21 +12,21 @@
 
 # Commit IDs for the (unversioned) redis-doc repository
 # https://fedoraproject.org/wiki/Packaging:SourceURL "Commit Revision"
-%global doc_commit 685cc5a4d323203d8e1eb85de3adc47830687207
+%global doc_commit 4cd19bb1c3e3e00a8ff62a1dec5c2c6bcf9bc4bf
 %global short_doc_commit %(c=%{doc_commit}; echo ${c:0:7})
 
 # %%{rpmmacrodir} not usable on EL-6
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:              redis
-Version:           5.0.6
+Version:           5.0.7
 Release:           1%{?dist}
 Summary:           A persistent key-value database
 # redis, linenoise, lzf, hiredis are BSD
 # lua is MIT
 License:           BSD and MIT
 URL:               https://redis.io
-Source0:           https://download.redis.io/releases/%{name}-%{version}.tar.gz
+Source0:           http://download.redis.io/releases/%{name}-%{version}.tar.gz
 Source1:           %{name}.logrotate
 Source2:           %{name}-sentinel.service
 Source3:           %{name}.service
@@ -272,6 +272,9 @@ exit 0
 
 
 %changelog
+* Tue Nov 19 2019 Carl George <carl@george.computer> - 5.0.7-1
+- Latest upstream
+
 * Thu Sep 26 2019 Nathan Scott <nathans@redhat.com> - 5.0.6-1
 - Upstream 5.0.6 release and redis-doc updates.
 
