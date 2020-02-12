@@ -1,0 +1,29 @@
+From df079a0b34f922b75ad388b16f8f7eace52a09b0 Mon Sep 17 00:00:00 2001
+From: Khem Raj <raj.khem@gmail.com>
+Date: Wed, 12 Feb 2020 16:16:41 +1100
+Subject: [PATCH 3/3] Mark extern definition of SDS_NOINIT in sds.h
+
+This helps avoiding multiple definition of this variable, its also
+defined globally in sds.c
+
+Signed-off-by: Khem Raj <raj.khem@gmail.com>
+---
+ src/sds.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/sds.h b/src/sds.h
+index 1bdb60d..adcc12c 100644
+--- a/src/sds.h
++++ b/src/sds.h
+@@ -34,7 +34,7 @@
+ #define __SDS_H
+ 
+ #define SDS_MAX_PREALLOC (1024*1024)
+-const char *SDS_NOINIT;
++extern const char *SDS_NOINIT;
+ 
+ #include <sys/types.h>
+ #include <stdarg.h>
+-- 
+2.24.1
+

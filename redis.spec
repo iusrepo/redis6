@@ -20,7 +20,7 @@
 
 Name:              redis
 Version:           5.0.7
-Release:           2%{?dist}
+Release:           3%{?dist}
 Summary:           A persistent key-value database
 # redis, linenoise, lzf, hiredis are BSD
 # lua is MIT
@@ -48,6 +48,8 @@ Source10:          https://github.com/antirez/%{name}-doc/archive/%{doc_commit}/
 Patch0001:         0001-1st-man-pageis-for-redis-cli-redis-benchmark-redis-c.patch
 # https://github.com/antirez/redis/pull/3494 - symlink
 Patch0002:         0002-install-redis-check-rdb-as-a-symlink-instead-of-dupl.patch
+# https://github.com/antirez/redis/pull/6691 - gcc v10
+Patch0003:         0003-Mark-extern-definition-of-SDS_NOINIT-in-sds.h.patch
 BuildRequires:     gcc
 %if 0%{?with_tests}
 BuildRequires:     procps-ng
@@ -55,7 +57,7 @@ BuildRequires:     tcl
 %endif
 BuildRequires:     systemd
 # redis-trib functionality migrated to redis-cli
-Obsoletes:         redis-trib
+Obsoletes:         redis-trib < 5
 # Required for redis-shutdown
 Requires:          /bin/awk
 Requires:          logrotate
@@ -125,6 +127,7 @@ administration and development.
 mv ../%{name}-doc-%{doc_commit} doc
 %patch0001 -p1
 %patch0002 -p1
+%patch0003 -p1
 
 mv deps/lua/COPYRIGHT    COPYRIGHT-lua
 mv deps/hiredis/COPYING  COPYING-hiredis
@@ -272,6 +275,9 @@ exit 0
 
 
 %changelog
+* Wed Feb 12 2020 Nathan Scott <nathans@redhat.com> - 5.0.7-3
+- Patch extern SDS_NOINIT definition for gcc 10 (RHBZ #1799969)
+
 * Thu Jan 30 2020 Fedora Release Engineering <releng@fedoraproject.org> - 5.0.7-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_32_Mass_Rebuild
 
