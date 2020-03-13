@@ -48,8 +48,6 @@ Source10:          https://github.com/antirez/%{name}-doc/archive/%{doc_commit}/
 Patch0001:         0001-1st-man-pageis-for-redis-cli-redis-benchmark-redis-c.patch
 # https://github.com/antirez/redis/pull/3494 - symlink
 Patch0002:         0002-install-redis-check-rdb-as-a-symlink-instead-of-dupl.patch
-# https://github.com/antirez/redis/pull/6691 - gcc v10
-Patch0003:         0003-Mark-extern-definition-of-SDS_NOINIT-in-sds.h.patch
 BuildRequires:     gcc
 %if 0%{?with_tests}
 BuildRequires:     procps-ng
@@ -127,7 +125,6 @@ administration and development.
 mv ../%{name}-doc-%{doc_commit} doc
 %patch0001 -p1
 %patch0002 -p1
-%patch0003 -p1
 
 mv deps/lua/COPYRIGHT    COPYRIGHT-lua
 mv deps/hiredis/COPYING  COPYING-hiredis
