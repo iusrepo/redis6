@@ -12,15 +12,15 @@
 
 # Commit IDs for the (unversioned) redis-doc repository
 # https://fedoraproject.org/wiki/Packaging:SourceURL "Commit Revision"
-%global doc_commit 4cd19bb1c3e3e00a8ff62a1dec5c2c6bcf9bc4bf
+%global doc_commit 3a41bc371a894cf63af99046f61052614379f7b0
 %global short_doc_commit %(c=%{doc_commit}; echo ${c:0:7})
 
 # %%{rpmmacrodir} not usable on EL-6
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:              redis
-Version:           5.0.7
-Release:           3%{?dist}
+Version:           5.0.8
+Release:           1%{?dist}
 Summary:           A persistent key-value database
 # redis, linenoise, lzf, hiredis are BSD
 # lua is MIT
@@ -275,6 +275,9 @@ exit 0
 
 
 %changelog
+* Fri Mar 13 2020 Nathan Scott <nathans@redhat.com> - 5.0.8-1
+- Upstream 5.0.8 release.
+
 * Wed Feb 12 2020 Nathan Scott <nathans@redhat.com> - 5.0.7-3
 - Patch extern SDS_NOINIT definition for gcc 10 (RHBZ #1799969)
 
