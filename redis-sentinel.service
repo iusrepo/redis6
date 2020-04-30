@@ -5,7 +5,7 @@ After=network-online.target
 Wants=network-online.target
 
 [Service]
-ExecStart=/usr/bin/redis-sentinel /etc/redis-sentinel.conf --supervised systemd
+ExecStart=/usr/bin/redis-sentinel /etc/redis-sentinel.conf --daemonize no --supervised systemd
 ExecStop=/usr/libexec/redis-shutdown redis-sentinel
 Type=notify
 User=redis

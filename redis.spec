@@ -12,14 +12,14 @@
 
 # Commit IDs for the (unversioned) redis-doc repository
 # https://fedoraproject.org/wiki/Packaging:SourceURL "Commit Revision"
-%global doc_commit 3a41bc371a894cf63af99046f61052614379f7b0
+%global doc_commit ee32a19c1a8ae372c60aea6ed7025f76a93a68b1
 %global short_doc_commit %(c=%{doc_commit}; echo ${c:0:7})
 
 # %%{rpmmacrodir} not usable on EL-6
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:              redis
-Version:           5.0.8
+Version:           6.0.0
 Release:           1%{?dist}
 Summary:           A persistent key-value database
 # redis, linenoise, lzf, hiredis are BSD
@@ -53,7 +53,9 @@ BuildRequires:     gcc
 BuildRequires:     procps-ng
 BuildRequires:     tcl
 %endif
-BuildRequires:     systemd
+BuildRequires:     pkgconfig(libsystemd)
+BuildRequires:     systemd-devel
+BuildRequires:     openssl-devel
 # redis-trib functionality migrated to redis-cli
 Obsoletes:         redis-trib < 5
 # Required for redis-shutdown
@@ -142,7 +144,7 @@ if test "$api" != "%{redis_modules_abi}"; then
    exit 1
 fi
 
-%global make_flags	DEBUG="" V="echo" LDFLAGS="%{?__global_ldflags}" CFLAGS+="%{optflags} -fPIC" INSTALL="install -p" PREFIX=%{buildroot}%{_prefix}
+%global make_flags	DEBUG="" V="echo" LDFLAGS="%{?__global_ldflags}" CFLAGS+="%{optflags} -fPIC" INSTALL="install -p" PREFIX=%{buildroot}%{_prefix} BUILD_WITH_SYSTEMD=yes BUILD_TLS=yes
 
 %build
 make %{?_smp_mflags} %{make_flags} all
@@ -272,6 +274,9 @@ exit 0
 
 
 %changelog
+* Fri May 01 2020 Nathan Scott <nathans@redhat.com> - 6.0.0-1
+- Upstream release.
+
 * Fri Mar 13 2020 Nathan Scott <nathans@redhat.com> - 5.0.8-1
 - Upstream 5.0.8 release.
 
