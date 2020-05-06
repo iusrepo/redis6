@@ -19,7 +19,7 @@
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:              redis
-Version:           6.0.0
+Version:           6.0.1
 Release:           1%{?dist}
 Summary:           A persistent key-value database
 # redis, linenoise, lzf, hiredis are BSD
@@ -274,6 +274,9 @@ exit 0
 
 
 %changelog
+* Wed May  6 2020 Remi Collet <rcollet@redhat.com> - 6.0.1-1
+- Upstream 6.0.1 release.
+
 * Fri May 01 2020 Nathan Scott <nathans@redhat.com> - 6.0.0-1
 - Upstream release.
 
