@@ -12,7 +12,7 @@
 
 # Commit IDs for the (unversioned) redis-doc repository
 # https://fedoraproject.org/wiki/Packaging:SourceURL "Commit Revision"
-%global doc_commit ee32a19c1a8ae372c60aea6ed7025f76a93a68b1
+%global doc_commit f092dd3227cc74978853e379c0a7731bdaa324af
 %global short_doc_commit %(c=%{doc_commit}; echo ${c:0:7})
 
 # %%{rpmmacrodir} not usable on EL-6
