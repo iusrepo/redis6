@@ -19,7 +19,7 @@
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:              redis
-Version:           6.0.3
+Version:           6.0.4
 Release:           1%{?dist}
 Summary:           A persistent key-value database
 # redis, linenoise, lzf, hiredis are BSD
@@ -48,6 +48,8 @@ Source10:          https://github.com/antirez/%{name}-doc/archive/%{doc_commit}/
 Patch0001:         0001-1st-man-pageis-for-redis-cli-redis-benchmark-redis-c.patch
 # https://github.com/antirez/redis/pull/3494 - symlink
 Patch0002:         0002-install-redis-check-rdb-as-a-symlink-instead-of-dupl.patch
+# https://github.com/antirez/redis/pull/7168 - notify systemd
+Patch0003:         0003-Notify-systemd-on-sentinel-startup.patch
 BuildRequires:     gcc
 %if 0%{?with_tests}
 BuildRequires:     procps-ng
@@ -127,6 +129,7 @@ administration and development.
 mv ../%{name}-doc-%{doc_commit} doc
 %patch0001 -p1
 %patch0002 -p1
+%patch0003 -p1
 
 mv deps/lua/COPYRIGHT    COPYRIGHT-lua
 mv deps/hiredis/COPYING  COPYING-hiredis
@@ -274,6 +277,12 @@ exit 0
 
 
 %changelog
+* Thu May 28 2020 Remi Collet <remi@remirepo.net> - 6.0.3-3
+- Add comment for TimeoutStartSec and TimeoutStopSec in limit.conf
+- Fix missing notification to systemd for sentinel
+  patch from https://github.com/antirez/redis/pull/7168
+- Upstream 6.0.4 release.
+
 * Mon May 18 2020 Nathan Scott <nathans@redhat.com> - 6.0.3-1
 - Upstream 6.0.3 release.
 
