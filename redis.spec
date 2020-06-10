@@ -19,7 +19,7 @@
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:              redis
-Version:           6.0.4
+Version:           6.0.5
 Release:           1%{?dist}
 Summary:           A persistent key-value database
 # redis, linenoise, lzf, hiredis are BSD
@@ -277,7 +277,10 @@ exit 0
 
 
 %changelog
-* Thu May 28 2020 Remi Collet <remi@remirepo.net> - 6.0.3-3
+* Wed Jun 10 2020 Nathan Scott <nathans@redhat.com> - 6.0.5-1
+- Upstream 6.0.5 release.
+
+* Thu May 28 2020 Remi Collet <remi@remirepo.net> - 6.0.4-3
 - Add comment for TimeoutStartSec and TimeoutStopSec in limit.conf
 - Fix missing notification to systemd for sentinel
   patch from https://github.com/antirez/redis/pull/7168
