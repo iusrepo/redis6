@@ -1,0 +1,22 @@
+From b5fc5d0a1bc4d959995688c8b363daa859c44036 Mon Sep 17 00:00:00 2001
+From: Remi Collet <remi@remirepo.net>
+Date: Tue, 21 Jul 2020 07:33:12 +0200
+Subject: [PATCH] Fix deprecated syntax
+
+---
+ tests/support/util.tcl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/support/util.tcl b/tests/support/util.tcl
+index fce3ffd1858..69ea675dca5 100644
+--- a/tests/support/util.tcl
++++ b/tests/support/util.tcl
+@@ -119,7 +119,7 @@ proc wait_for_log_message {srv_idx pattern from_line maxtries delay} {
+     set retry $maxtries
+     set stdout [srv $srv_idx stdout]
+     while {$retry} {
+-        set result [exec tail +$from_line < $stdout]
++        set result [exec tail -n +$from_line < $stdout]
+         set result [split $result "\n"]
+         foreach line $result {
+             if {[string match $pattern $line]} {

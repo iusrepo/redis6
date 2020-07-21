@@ -8,18 +8,18 @@
 #
 
 # Tests fail in mock, not in local build.
-%global with_tests %{?_with_tests:1}%{!?_with_tests:0}
+%bcond_with    tests
 
 # Commit IDs for the (unversioned) redis-doc repository
 # https://fedoraproject.org/wiki/Packaging:SourceURL "Commit Revision"
-%global doc_commit f092dd3227cc74978853e379c0a7731bdaa324af
+%global doc_commit 02423fd2f5603ae300654613a51eaee13bc5cb80
 %global short_doc_commit %(c=%{doc_commit}; echo ${c:0:7})
 
 # %%{rpmmacrodir} not usable on EL-6
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:              redis
-Version:           6.0.5
+Version:           6.0.6
 Release:           1%{?dist}
 Summary:           A persistent key-value database
 # redis, linenoise, lzf, hiredis are BSD
@@ -48,10 +48,11 @@ Source10:          https://github.com/antirez/%{name}-doc/archive/%{doc_commit}/
 Patch0001:         0001-1st-man-pageis-for-redis-cli-redis-benchmark-redis-c.patch
 # https://github.com/antirez/redis/pull/3494 - symlink
 Patch0002:         0002-install-redis-check-rdb-as-a-symlink-instead-of-dupl.patch
-# https://github.com/antirez/redis/pull/7168 - notify systemd
-Patch0003:         0003-Notify-systemd-on-sentinel-startup.patch
+# https://github.com/redis/redis/pull/7543 - tail syntax
+Patch0003:         0003-fix-deprecated-tail-syntax.patch
+
 BuildRequires:     gcc
-%if 0%{?with_tests}
+%if %{with tests}
 BuildRequires:     procps-ng
 BuildRequires:     tcl
 %endif
@@ -209,7 +210,7 @@ mkdir -p %{buildroot}%{macrosdir}
 install -pDm644 %{S:9} %{buildroot}%{macrosdir}/macros.%{name}
 
 %check
-%if 0%{?with_tests}
+%if %{with tests}
 # ERR Active defragmentation cannot be enabled: it requires a Redis server compiled
 # with a modified Jemalloc like the one shipped by default with the Redis source distribution
 sed -e '/memefficiency/d' -i tests/test_helper.tcl
@@ -277,6 +278,11 @@ exit 0
 
 
 %changelog
+* Tue Jul 21 2020 Remi Collet <rcollet@redhat.com> - 6.0.6-1
+- Upstream 6.0.6 release.
+- drop patch merged upstream
+- open https://github.com/redis/redis/pull/7543 fix deprecated tail syntax
+
 * Wed Jun 10 2020 Nathan Scott <nathans@redhat.com> - 6.0.5-1
 - Upstream 6.0.5 release.
 
