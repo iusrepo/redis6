@@ -26,7 +26,7 @@ Summary:           A persistent key-value database
 # lua is MIT
 License:           BSD and MIT
 URL:               https://redis.io
-Source0:           http://download.redis.io/releases/%{name}-%{version}.tar.gz
+Source0:           https://download.redis.io/releases/%{name}-%{version}.tar.gz
 Source1:           %{name}.logrotate
 Source2:           %{name}-sentinel.service
 Source3:           %{name}.service
