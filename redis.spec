@@ -12,15 +12,15 @@
 
 # Commit IDs for the (unversioned) redis-doc repository
 # https://fedoraproject.org/wiki/Packaging:SourceURL "Commit Revision"
-%global doc_commit 02423fd2f5603ae300654613a51eaee13bc5cb80
+%global doc_commit 2c335a8226789afae2b5a2ebbd689933b0a5e01a
 %global short_doc_commit %(c=%{doc_commit}; echo ${c:0:7})
 
 # %%{rpmmacrodir} not usable on EL-6
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:              redis
-Version:           6.0.6
-Release:           2%{?dist}
+Version:           6.0.7
+Release:           1%{?dist}
 Summary:           A persistent key-value database
 # redis, linenoise, lzf, hiredis are BSD
 # lua is MIT
@@ -48,8 +48,6 @@ Source10:          https://github.com/antirez/%{name}-doc/archive/%{doc_commit}/
 Patch0001:         0001-1st-man-pageis-for-redis-cli-redis-benchmark-redis-c.patch
 # https://github.com/antirez/redis/pull/3494 - symlink
 Patch0002:         0002-install-redis-check-rdb-as-a-symlink-instead-of-dupl.patch
-# https://github.com/redis/redis/pull/7543 - tail syntax
-Patch0003:         0003-fix-deprecated-tail-syntax.patch
 
 BuildRequires:     gcc
 %if %{with tests}
@@ -130,7 +128,6 @@ administration and development.
 mv ../%{name}-doc-%{doc_commit} doc
 %patch0001 -p1
 %patch0002 -p1
-%patch0003 -p1
 
 mv deps/lua/COPYRIGHT    COPYRIGHT-lua
 mv deps/hiredis/COPYING  COPYING-hiredis
@@ -278,6 +275,10 @@ exit 0
 
 
 %changelog
+* Tue Sep  1 2020 Remi Collet <remi@remirepo.net> - 6.0.7-1
+- Upstream 6.0.7 release.
+- drop patch merged upstream
+
 * Wed Jul 29 2020 Fedora Release Engineering <releng@fedoraproject.org> - 6.0.6-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_33_Mass_Rebuild
 
