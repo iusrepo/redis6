@@ -126,6 +126,7 @@ Conflicts:         redis < 4.0
 Manual pages and detailed documentation for many aspects of Redis use,
 administration and development.
 
+
 %prep
 %setup -q -b 10
 %setup -q
@@ -213,10 +214,6 @@ install -pDm644 %{S:9} %{buildroot}%{macrosdir}/macros.%{name}
 
 %check
 %if %{with tests}
-# ERR Active defragmentation cannot be enabled: it requires a Redis server compiled
-# with a modified Jemalloc like the one shipped by default with the Redis source distribution
-sed -e '/memefficiency/d' -i tests/test_helper.tcl
-
 # https://github.com/antirez/redis/issues/1417 (for "taskset -c 1")
 taskset -c 1 make %{make_flags} test
 make %{make_flags} test-sentinel
