@@ -20,7 +20,7 @@
 
 Name:              redis
 Version:           6.0.8
-Release:           1%{?dist}
+Release:           2%{?dist}
 Summary:           A persistent key-value database
 # redis, linenoise, lzf, hiredis are BSD
 # lua is MIT
@@ -66,10 +66,14 @@ Requires(pre):     shadow-utils
 Requires(post):    systemd
 Requires(preun):   systemd
 Requires(postun):  systemd
-Provides:          bundled(hiredis)
-Provides:          bundled(jemalloc)
-Provides:          bundled(lua-libs)
-Provides:          bundled(linenoise)
+# from deps/hiredis/hiredis.h
+Provides:          bundled(hiredis) = 0.14.0
+# from deps/jemalloc/VERSION
+Provides:          bundled(jemalloc) = 5.1.0
+# from deps/lua/src/lua.h
+Provides:          bundled(lua-libs) = 5.1.5
+# from deps/linenoise/linenoise.h
+Provides:          bundled(linenoise) = 1.0
 Provides:          bundled(lzf)
 
 %global redis_modules_abi 1
@@ -130,6 +134,7 @@ mv ../%{name}-doc-%{doc_commit} doc
 %patch0002 -p1
 
 mv deps/lua/COPYRIGHT    COPYRIGHT-lua
+mv deps/jemalloc/COPYING COPYING-jemalloc
 mv deps/hiredis/COPYING  COPYING-hiredis
 
 # Configuration file changes
@@ -240,6 +245,9 @@ exit 0
 %files
 %{!?_licensedir:%global license %%doc}
 %license COPYING
+%license COPYRIGHT-lua
+%license COPYING-jemalloc
+%license COPYING-hiredis
 %config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
 %attr(0640, redis, root) %config(noreplace) %{_sysconfdir}/%{name}.conf
 %attr(0640, redis, root) %config(noreplace) %{_sysconfdir}/%{name}-sentinel.conf
@@ -263,18 +271,22 @@ exit 0
 %dir %attr(0755, redis, redis) %ghost %{_localstatedir}/run/%{name}
 
 %files devel
+# main package is not required
 %license COPYING
-%license COPYRIGHT-lua
-%license COPYING-hiredis
 %{_includedir}/%{name}module.h
 %{macrosdir}/*
 
 %files doc
+# main package is not required
+%license COPYING
 %docdir %{_docdir}/%{name}
 %{_docdir}/%{name}
 
 
 %changelog
+* Tue Oct 20 2020 Remi Collet <remi@remirepo.net> - 6.0.8-2
+- add missing LICENSE files in main package
+
 * Thu Sep 10 2020 Remi Collet <remi@remirepo.net> - 6.0.8-1
 - Upstream 6.0.8 release.
 
