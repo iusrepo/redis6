@@ -22,7 +22,7 @@ Name:              redis
 Version:           6.0.8
 Release:           2%{?dist}
 Summary:           A persistent key-value database
-# redis, linenoise, lzf, hiredis are BSD
+# redis, jemalloc, linenoise, lzf, hiredis are BSD
 # lua is MIT
 License:           BSD and MIT
 URL:               https://redis.io
