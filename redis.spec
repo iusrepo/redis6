@@ -20,7 +20,7 @@
 
 Name:              redis
 Version:           6.0.9
-Release:           2%{?dist}
+Release:           3%{?dist}
 Summary:           A persistent key-value database
 # redis, jemalloc, linenoise, lzf, hiredis are BSD
 # lua is MIT
@@ -225,7 +225,7 @@ useradd -r -g %{name} -d %{_sharedstatedir}/%{name} -s /sbin/nologin \
 exit 0
 
 %post
-if [ -f %{_sysconfdir}/%{name}.conf ]; then
+if [ -f %{_sysconfdir}/%{name}.conf -a ! -L %{_sysconfdir}/%{name}.conf ]; then
   if [ -f %{_sysconfdir}/%{name}/%{name}.conf.rpmnew ]; then
     rm    %{_sysconfdir}/%{name}/%{name}.conf.rpmnew
   fi
@@ -235,7 +235,7 @@ if [ -f %{_sysconfdir}/%{name}.conf ]; then
   mv %{_sysconfdir}/%{name}.conf %{_sysconfdir}/%{name}/%{name}.conf
   echo -e "\nWarning: %{name} configuration is now in %{_sysconfdir}/%{name} directory\n"
 fi
-if [ -f %{_sysconfdir}/%{name}-sentinel.conf ]; then
+if [ -f %{_sysconfdir}/%{name}-sentinel.conf  -a ! -L %{_sysconfdir}/%{name}-sentinel.conf  ]; then
   if [ -f %{_sysconfdir}/%{name}/sentinel.conf.rpmnew ]; then
     rm    %{_sysconfdir}/%{name}/sentinel.conf.rpmnew
   fi
@@ -298,6 +298,9 @@ fi
 
 
 %changelog
+* Mon Nov 24 2020 Remi Collet <remi@remirepo.net> - 6.0.9-3
+- fix check for regular file, not symlink
+
 * Mon Nov 23 2020 Remi Collet <remi@remirepo.net> - 6.0.9-2
 - move configuration in /etc/redis per upstream recommendation
   see https://github.com/redis/redis/issues/8051
