@@ -298,7 +298,7 @@ fi
 
 
 %changelog
-* Mon Nov 24 2020 Remi Collet <remi@remirepo.net> - 6.0.9-3
+* Tue Nov 24 2020 Remi Collet <remi@remirepo.net> - 6.0.9-3
 - fix check for regular file, not symlink
 
 * Mon Nov 23 2020 Remi Collet <remi@remirepo.net> - 6.0.9-2
