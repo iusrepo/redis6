@@ -46,6 +46,7 @@ Patch0001:         0001-1st-man-pageis-for-redis-cli-redis-benchmark-redis-c.pat
 # https://github.com/antirez/redis/pull/3494 - symlink
 Patch0002:         0002-install-redis-check-rdb-as-a-symlink-instead-of-dupl.patch
 
+BuildRequires: make
 BuildRequires:     gcc
 %if %{with tests}
 BuildRequires:     procps-ng
