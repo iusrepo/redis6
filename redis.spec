@@ -12,15 +12,15 @@
 
 # Commit IDs for the (unversioned) redis-doc repository
 # https://fedoraproject.org/wiki/Packaging:SourceURL "Commit Revision"
-%global doc_commit 8d4bf9bc476829a84a055c049be72634d6e938df
+%global doc_commit e0528232fdd0d2efc91d62b798b924d716f88813
 %global short_doc_commit %(c=%{doc_commit}; echo ${c:0:7})
 
 # %%{rpmmacrodir} not usable on EL-6
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:              redis
-Version:           6.0.10
-Release:           2%{?dist}
+Version:           6.0.11
+Release:           1%{?dist}
 Summary:           A persistent key-value database
 # redis, jemalloc, linenoise, lzf, hiredis are BSD
 # lua is MIT
@@ -33,7 +33,7 @@ Source3:           %{name}.service
 Source6:           %{name}-shutdown
 Source7:           %{name}-limit-systemd
 Source9:           macros.%{name}
-Source10:          https://github.com/antirez/%{name}-doc/archive/%{doc_commit}/%{name}-doc-%{short_doc_commit}.tar.gz
+Source10:          https://github.com/%{name}/%{name}-doc/archive/%{doc_commit}/%{name}-doc-%{short_doc_commit}.tar.gz
 
 # To refresh patches:
 # tar xf redis-xxx.tar.gz && cd redis-xxx && git init && git add . && git commit -m "%%{version} baseline"
@@ -41,9 +41,9 @@ Source10:          https://github.com/antirez/%{name}-doc/archive/%{doc_commit}/
 # Then refresh your patches
 # git format-patch HEAD~<number of expected patches>
 # Update configuration for Fedora
-# https://github.com/antirez/redis/pull/3491 - man pages
+# https://github.com/redis/redis/pull/3491 - man pages
 Patch0001:         0001-1st-man-pageis-for-redis-cli-redis-benchmark-redis-c.patch
-# https://github.com/antirez/redis/pull/3494 - symlink
+# https://github.com/redis/redis/pull/3494 - symlink
 Patch0002:         0002-install-redis-check-rdb-as-a-symlink-instead-of-dupl.patch
 
 BuildRequires: make
@@ -212,7 +212,7 @@ install -pDm644 %{S:9} %{buildroot}%{macrosdir}/macros.%{name}
 
 %check
 %if %{with tests}
-# https://github.com/antirez/redis/issues/1417 (for "taskset -c 1")
+# https://github.com/redis/redis/issues/1417 (for "taskset -c 1")
 taskset -c 1 make %{make_flags} test
 make %{make_flags} test-sentinel
 %endif
@@ -299,6 +299,9 @@ fi
 
 
 %changelog
+* Wed Feb 24 2021 Nathan Scott <nathans@redhat.com> - 6.0.11-1
+- Upstream 6.0.11 release.
+
 * Wed Jan 27 2021 Fedora Release Engineering <releng@fedoraproject.org> - 6.0.10-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_34_Mass_Rebuild
 
@@ -339,7 +342,7 @@ fi
 * Thu May 28 2020 Remi Collet <remi@remirepo.net> - 6.0.4-3
 - Add comment for TimeoutStartSec and TimeoutStopSec in limit.conf
 - Fix missing notification to systemd for sentinel
-  patch from https://github.com/antirez/redis/pull/7168
+  patch from https://github.com/redis/redis/pull/7168
 - Upstream 6.0.4 release.
 
 * Mon May 18 2020 Nathan Scott <nathans@redhat.com> - 6.0.3-1
@@ -503,11 +506,11 @@ fi
 
 * Wed Sep 14 2016 Remi Collet <remi@fedoraproject.org> - 3.2.3-2
 - add missing man pages #1374577
-  using patch from https://github.com/antirez/redis/pull/3491
+  using patch from https://github.com/redis/redis/pull/3491
 - data and configuration should not be publicly readable #1374700
 - remove /var/run/redis with systemd #1374728
 - provide redis-check-rdb as a symlink to redis-server #1374736
-  using patch from https://github.com/antirez/redis/pull/3494
+  using patch from https://github.com/redis/redis/pull/3494
 - move redis-shutdown to libexec
 
 * Thu Aug  4 2016 Haïkel Guémar <hguemar@fedoraproject.org> - 3.2.3-1
