@@ -19,7 +19,7 @@
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:              redis
-Version:           6.0.11
+Version:           6.2.0
 Release:           1%{?dist}
 Summary:           A persistent key-value database
 # redis, jemalloc, linenoise, lzf, hiredis are BSD
@@ -43,8 +43,6 @@ Source10:          https://github.com/%{name}/%{name}-doc/archive/%{doc_commit}/
 # Update configuration for Fedora
 # https://github.com/redis/redis/pull/3491 - man pages
 Patch0001:         0001-1st-man-pageis-for-redis-cli-redis-benchmark-redis-c.patch
-# https://github.com/redis/redis/pull/3494 - symlink
-Patch0002:         0002-install-redis-check-rdb-as-a-symlink-instead-of-dupl.patch
 
 BuildRequires: make
 BuildRequires:     gcc
@@ -130,7 +128,6 @@ administration and development.
 %setup -q
 mv ../%{name}-doc-%{doc_commit} doc
 %patch0001 -p1
-%patch0002 -p1
 
 mv deps/lua/COPYRIGHT    COPYRIGHT-lua
 mv deps/jemalloc/COPYING COPYING-jemalloc
@@ -299,6 +296,10 @@ fi
 
 
 %changelog
+* Mon Mar 01 2021 Nathan Scott <nathans@redhat.com> - 6.2.0-1
+- Upstream 6.2.0 release (RHBZ #1915463).
+- drop patch merged upstream.
+
 * Wed Feb 24 2021 Nathan Scott <nathans@redhat.com> - 6.0.11-1
 - Upstream 6.0.11 release.
 
