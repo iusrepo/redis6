@@ -20,7 +20,7 @@
 
 Name:              redis
 Version:           6.2.0
-Release:           1%{?dist}
+Release:           2%{?dist}
 Summary:           A persistent key-value database
 # redis, jemalloc, linenoise, lzf, hiredis are BSD
 # lua is MIT
@@ -296,6 +296,10 @@ fi
 
 
 %changelog
+* Tue Mar 02 2021 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 6.2.0-2
+- Rebuilt for updated systemd-rpm-macros
+  See https://pagure.io/fesco/issue/2583.
+
 * Mon Mar 01 2021 Nathan Scott <nathans@redhat.com> - 6.2.0-1
 - Upstream 6.2.0 release (RHBZ #1915463).
 - drop patch merged upstream.
