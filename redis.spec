@@ -19,8 +19,8 @@
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:              redis
-Version:           6.2.0
-Release:           2%{?dist}
+Version:           6.2.1
+Release:           1%{?dist}
 Summary:           A persistent key-value database
 # redis, jemalloc, linenoise, lzf, hiredis are BSD
 # lua is MIT
@@ -149,7 +149,7 @@ fi
 %global make_flags	DEBUG="" V="echo" LDFLAGS="%{?__global_ldflags}" CFLAGS+="%{optflags} -fPIC" INSTALL="install -p" PREFIX=%{buildroot}%{_prefix} BUILD_WITH_SYSTEMD=yes BUILD_TLS=yes
 
 %build
-make %{?_smp_mflags} %{make_flags} all
+%make_build %{make_flags} all
 
 %install
 make %{make_flags} install
@@ -296,6 +296,10 @@ fi
 
 
 %changelog
+* Thu Apr 01 2021 Nathan Scott <nathans@redhat.com> - 6.2.1-1
+- Upstream 6.2.1 release
+- Merged make-macros spec change from Tom Stellard
+
 * Tue Mar 02 2021 Zbigniew Jędrzejewski-Szmek <zbyszek@in.waw.pl> - 6.2.0-2
 - Rebuilt for updated systemd-rpm-macros
   See https://pagure.io/fesco/issue/2583.
