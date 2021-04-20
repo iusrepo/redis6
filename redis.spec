@@ -12,14 +12,14 @@
 
 # Commit IDs for the (unversioned) redis-doc repository
 # https://fedoraproject.org/wiki/Packaging:SourceURL "Commit Revision"
-%global doc_commit e0528232fdd0d2efc91d62b798b924d716f88813
+%global doc_commit 42ccc962f01baad22fecd4ee1b58e1808ddc49fc
 %global short_doc_commit %(c=%{doc_commit}; echo ${c:0:7})
 
 # %%{rpmmacrodir} not usable on EL-6
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:              redis
-Version:           6.2.1
+Version:           6.2.2
 Release:           1%{?dist}
 Summary:           A persistent key-value database
 # redis, jemalloc, linenoise, lzf, hiredis are BSD
@@ -296,6 +296,9 @@ fi
 
 
 %changelog
+* Tue Apr 20 2021 Remi Collet <remi@remirepo.net> - 6.2.2-1
+- Upstream 6.2.2 release
+
 * Thu Apr 01 2021 Nathan Scott <nathans@redhat.com> - 6.2.1-1
 - Upstream 6.2.1 release
 - Merged make-macros spec change from Tom Stellard
