@@ -283,8 +283,8 @@ fi
 %dir %attr(0755, redis, redis) %ghost %{_localstatedir}/run/%{name}
 
 %files devel
-# main package is not required
-%license COPYING
+# specific for documentation (CC-BY-SA)
+%license doc/LICENSE
 %{_includedir}/%{name}module.h
 %{macrosdir}/*
 
