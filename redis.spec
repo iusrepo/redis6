@@ -20,7 +20,7 @@
 
 Name:              redis
 Version:           6.2.5
-Release:           1%{?dist}
+Release:           2%{?dist}
 Summary:           A persistent key-value database
 # redis, jemalloc, linenoise, lzf, hiredis are BSD
 # lua is MIT
@@ -296,6 +296,9 @@ fi
 
 
 %changelog
+* Tue Sep 14 2021 Sahana Prasad <sahana@redhat.com> - 6.2.5-2
+- Rebuilt with OpenSSL 3.0.0
+
 * Thu Jul 22 2021 Nathan Scott <nathans@redhat.com> - 6.2.5-1
 - Upstream 6.2.5 release (RHBZ #1984631).
 - Fix CVE-2021-32761: 32-bit systems BITFIELD command integer overflow.
