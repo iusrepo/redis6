@@ -297,7 +297,7 @@ fi
 
 %changelog
 * Mon Oct  4 2021 Remi Collet <remi@remirepo.net> - 6.2.6-1
-- Upstream 6.2.4 release.
+- Upstream 6.2.6 release.
 
 * Tue Sep 14 2021 Sahana Prasad <sahana@redhat.com> - 6.2.5-2
 - Rebuilt with OpenSSL 3.0.0
