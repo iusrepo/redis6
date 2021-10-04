@@ -12,15 +12,15 @@
 
 # Commit IDs for the (unversioned) redis-doc repository
 # https://fedoraproject.org/wiki/Packaging:SourceURL "Commit Revision"
-%global doc_commit 6a9c6310b7291d802cf2fbc45b742e97e2804413
+%global doc_commit 3fdb6df44ecd5c4d99ea52a0133177f5ebc24805
 %global short_doc_commit %(c=%{doc_commit}; echo ${c:0:7})
 
 # %%{rpmmacrodir} not usable on EL-6
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:              redis
-Version:           6.2.5
-Release:           2%{?dist}
+Version:           6.2.6
+Release:           1%{?dist}
 Summary:           A persistent key-value database
 # redis, jemalloc, linenoise, lzf, hiredis are BSD
 # lua is MIT
@@ -296,6 +296,9 @@ fi
 
 
 %changelog
+* Mon Oct  4 2021 Remi Collet <remi@remirepo.net> - 6.2.6-1
+- Upstream 6.2.4 release.
+
 * Tue Sep 14 2021 Sahana Prasad <sahana@redhat.com> - 6.2.5-2
 - Rebuilt with OpenSSL 3.0.0
 
