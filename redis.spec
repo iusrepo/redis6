@@ -20,7 +20,7 @@
 
 Name:              redis
 Version:           6.2.6
-Release:           1%{?dist}
+Release:           2%{?dist}
 Summary:           A persistent key-value database
 # redis, jemalloc, linenoise, lzf, hiredis are BSD
 # lua is MIT
@@ -283,19 +283,22 @@ fi
 %dir %attr(0755, redis, redis) %ghost %{_localstatedir}/run/%{name}
 
 %files devel
-# specific for documentation (CC-BY-SA)
-%license doc/LICENSE
+# main package is not required
+%license COPYING
 %{_includedir}/%{name}module.h
 %{macrosdir}/*
 
 %files doc
-# main package is not required
-%license COPYING
+# specific for documentation (CC-BY-SA)
+%license doc/LICENSE
 %docdir %{_docdir}/%{name}
 %{_docdir}/%{name}
 
 
 %changelog
+* Wed Nov  3 2021 Remi Collet <remi@remirepo.net> - 6.2.6-2
+- use proper license in dec/devel sub-packages
+
 * Mon Oct  4 2021 Remi Collet <remi@remirepo.net> - 6.2.6-1
 - Upstream 6.2.6 release.
 
