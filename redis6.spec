@@ -18,22 +18,22 @@
 # %%{rpmmacrodir} not usable on EL-6
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
-Name:              redis
+Name:              redis6
 Version:           6.2.6
-Release:           2%{?dist}
+Release:           3%{?dist}
 Summary:           A persistent key-value database
 # redis, jemalloc, linenoise, lzf, hiredis are BSD
 # lua is MIT
 License:           BSD and MIT
 URL:               https://redis.io
-Source0:           https://download.redis.io/releases/%{name}-%{version}.tar.gz
-Source1:           %{name}.logrotate
-Source2:           %{name}-sentinel.service
-Source3:           %{name}.service
-Source6:           %{name}-shutdown
-Source7:           %{name}-limit-systemd
-Source9:           macros.%{name}
-Source10:          https://github.com/%{name}/%{name}-doc/archive/%{doc_commit}/%{name}-doc-%{short_doc_commit}.tar.gz
+Source0:           https://download.redis.io/releases/redis-%{version}.tar.gz
+Source1:           redis.logrotate
+Source2:           redis-sentinel.service
+Source3:           redis.service
+Source6:           redis-shutdown
+Source7:           redis-limit-systemd
+Source9:           macros.redis
+Source10:          https://github.com/redis/redis-doc/archive/%{doc_commit}/redis-doc-%{short_doc_commit}.tar.gz
 
 # To refresh patches:
 # tar xf redis-xxx.tar.gz && cd redis-xxx && git init && git add . && git commit -m "%%{version} baseline"
@@ -53,8 +53,6 @@ BuildRequires:     tcl
 BuildRequires:     pkgconfig(libsystemd)
 BuildRequires:     systemd-devel
 BuildRequires:     openssl-devel
-# redis-trib functionality migrated to redis-cli
-Obsoletes:         redis-trib < 5
 # Required for redis-shutdown
 Requires:          /bin/awk
 Requires:          logrotate
@@ -73,8 +71,14 @@ Provides:          bundled(linenoise) = 1.0
 Provides:          bundled(lzf)
 
 %global redis_modules_abi 1
-%global redis_modules_dir %{_libdir}/%{name}/modules
+%global redis_modules_dir %{_libdir}/redis/modules
 Provides:          redis(modules_abi)%{?_isa} = %{redis_modules_abi}
+
+## Provide & conflict with the stock package name
+Provides:          redis = %{version}-%{release}
+Provides:          redis%{?_isa} = %{version}-%{release}
+Conflicts:         redis < %{version}-%{release}
+
 
 %description
 Redis is an advanced key-value store. It is often referred to as a data 
@@ -104,7 +108,7 @@ You can use Redis from most programming languages also.
 %package           devel
 Summary:           Development header for Redis module development
 # Header-Only Library (https://fedoraproject.org/wiki/Packaging:Guidelines)
-Provides:          %{name}-static = %{version}-%{release}
+Provides:          redis-static = %{version}-%{release}
 
 %description       devel
 Header file required for building loadable Redis modules. Detailed
@@ -115,19 +119,14 @@ Summary:           Documentation for Redis including man pages
 License:           CC-BY-SA
 BuildArch:         noarch
 
-# http://fedoraproject.org/wiki/Packaging:Conflicts "Splitting Packages"
-Conflicts:         redis < 4.0
-
 %description       doc
 Manual pages and detailed documentation for many aspects of Redis use,
 administration and development.
 
 
 %prep
-%setup -q -b 10
-%setup -q
-mv ../%{name}-doc-%{doc_commit} doc
-%patch0001 -p1
+%autosetup -n redis-%{version} -a 10 -p 1
+mv redis-doc-%{doc_commit} doc
 
 mv deps/lua/COPYRIGHT    COPYRIGHT-lua
 mv deps/jemalloc/COPYING COPYING-jemalloc
@@ -155,17 +154,17 @@ fi
 make %{make_flags} install
 
 # Filesystem.
-install -d %{buildroot}%{_sharedstatedir}/%{name}
-install -d %{buildroot}%{_localstatedir}/log/%{name}
-install -d %{buildroot}%{_localstatedir}/run/%{name}
+install -d %{buildroot}%{_sharedstatedir}/redis
+install -d %{buildroot}%{_localstatedir}/log/redis
+install -d %{buildroot}%{_localstatedir}/run/redis
 install -d %{buildroot}%{redis_modules_dir}
 
 # Install logrotate file.
-install -pDm644 %{S:1} %{buildroot}%{_sysconfdir}/logrotate.d/%{name}
+install -pDm644 %{S:1} %{buildroot}%{_sysconfdir}/logrotate.d/redis
 
 # Install configuration files.
-install -pDm640 %{name}.conf  %{buildroot}%{_sysconfdir}/%{name}/%{name}.conf
-install -pDm640 sentinel.conf %{buildroot}%{_sysconfdir}/%{name}/sentinel.conf
+install -pDm640 redis.conf  %{buildroot}%{_sysconfdir}/redis/redis.conf
+install -pDm640 sentinel.conf %{buildroot}%{_sysconfdir}/redis/sentinel.conf
 
 # Install systemd unit files.
 mkdir -p %{buildroot}%{_unitdir}
@@ -173,17 +172,17 @@ install -pm644 %{S:3} %{buildroot}%{_unitdir}
 install -pm644 %{S:2} %{buildroot}%{_unitdir}
 
 # Install systemd limit files (requires systemd >= 204)
-install -p -D -m 644 %{S:7} %{buildroot}%{_sysconfdir}/systemd/system/%{name}.service.d/limit.conf
-install -p -D -m 644 %{S:7} %{buildroot}%{_sysconfdir}/systemd/system/%{name}-sentinel.service.d/limit.conf
+install -p -D -m 644 %{S:7} %{buildroot}%{_sysconfdir}/systemd/system/redis.service.d/limit.conf
+install -p -D -m 644 %{S:7} %{buildroot}%{_sysconfdir}/systemd/system/redis-sentinel.service.d/limit.conf
 
 # Fix non-standard-executable-perm error.
-chmod 755 %{buildroot}%{_bindir}/%{name}-*
+chmod 755 %{buildroot}%{_bindir}/redis-*
 
 # Install redis-shutdown
-install -pDm755 %{S:6} %{buildroot}%{_libexecdir}/%{name}-shutdown
+install -pDm755 %{S:6} %{buildroot}%{_libexecdir}/redis-shutdown
 
 # Install redis module header
-install -pDm644 src/%{name}module.h %{buildroot}%{_includedir}/%{name}module.h
+install -pDm644 src/redismodule.h %{buildroot}%{_includedir}/redismodule.h
 
 # Install man pages
 man=$(dirname %{buildroot}%{_mandir})
@@ -194,7 +193,7 @@ ln -s redis-server.1 %{buildroot}%{_mandir}/man1/redis-sentinel.1
 ln -s redis.conf.5   %{buildroot}%{_mandir}/man5/redis-sentinel.conf.5
 
 # Install documentation and html pages
-doc=$(echo %{buildroot}/%{_docdir}/%{name})
+doc=$(echo %{buildroot}/%{_docdir}/redis)
 for page in 00-RELEASENOTES BUGS CONTRIBUTING MANIFESTO; do
     install -Dpm644 $page $doc/$page
 done
@@ -205,7 +204,7 @@ done
 
 # Install rpm macros for redis modules
 mkdir -p %{buildroot}%{macrosdir}
-install -pDm644 %{S:9} %{buildroot}%{macrosdir}/macros.%{name}
+install -pDm644 %{S:9} %{buildroot}%{macrosdir}/macros.redis
 
 %check
 %if %{with tests}
@@ -215,43 +214,43 @@ make %{make_flags} test-sentinel
 %endif
 
 %pre
-getent group %{name} &> /dev/null || \
-groupadd -r %{name} &> /dev/null
-getent passwd %{name} &> /dev/null || \
-useradd -r -g %{name} -d %{_sharedstatedir}/%{name} -s /sbin/nologin \
--c 'Redis Database Server' %{name} &> /dev/null
+getent group redis &> /dev/null || \
+groupadd -r redis &> /dev/null
+getent passwd redis &> /dev/null || \
+useradd -r -g redis -d %{_sharedstatedir}/redis -s /sbin/nologin \
+-c 'Redis Database Server' redis &> /dev/null
 exit 0
 
 %post
-if [ -f %{_sysconfdir}/%{name}.conf -a ! -L %{_sysconfdir}/%{name}.conf ]; then
-  if [ -f %{_sysconfdir}/%{name}/%{name}.conf.rpmnew ]; then
-    rm    %{_sysconfdir}/%{name}/%{name}.conf.rpmnew
+if [ -f %{_sysconfdir}/redis.conf -a ! -L %{_sysconfdir}/redis.conf ]; then
+  if [ -f %{_sysconfdir}/redis/redis.conf.rpmnew ]; then
+    rm    %{_sysconfdir}/redis/redis.conf.rpmnew
   fi
-  if [ -f %{_sysconfdir}/%{name}/%{name}.conf ]; then
-    mv    %{_sysconfdir}/%{name}/%{name}.conf %{_sysconfdir}/%{name}/%{name}.conf.rpmnew
+  if [ -f %{_sysconfdir}/redis/redis.conf ]; then
+    mv    %{_sysconfdir}/redis/redis.conf %{_sysconfdir}/redis/redis.conf.rpmnew
   fi
-  mv %{_sysconfdir}/%{name}.conf %{_sysconfdir}/%{name}/%{name}.conf
-  echo -e "\nWarning: %{name} configuration is now in %{_sysconfdir}/%{name} directory\n"
+  mv %{_sysconfdir}/redis.conf %{_sysconfdir}/redis/redis.conf
+  echo -e "\nWarning: redis configuration is now in %{_sysconfdir}/redis directory\n"
 fi
-if [ -f %{_sysconfdir}/%{name}-sentinel.conf  -a ! -L %{_sysconfdir}/%{name}-sentinel.conf  ]; then
-  if [ -f %{_sysconfdir}/%{name}/sentinel.conf.rpmnew ]; then
-    rm    %{_sysconfdir}/%{name}/sentinel.conf.rpmnew
+if [ -f %{_sysconfdir}/redis-sentinel.conf  -a ! -L %{_sysconfdir}/redis-sentinel.conf  ]; then
+  if [ -f %{_sysconfdir}/redis/sentinel.conf.rpmnew ]; then
+    rm    %{_sysconfdir}/redis/sentinel.conf.rpmnew
   fi
-  if [ -f %{_sysconfdir}/%{name}/sentinel.conf ]; then
-    mv    %{_sysconfdir}/%{name}/sentinel.conf %{_sysconfdir}/%{name}/sentinel.conf.rpmnew
+  if [ -f %{_sysconfdir}/redis/sentinel.conf ]; then
+    mv    %{_sysconfdir}/redis/sentinel.conf %{_sysconfdir}/redis/sentinel.conf.rpmnew
   fi
-  mv %{_sysconfdir}/%{name}-sentinel.conf %{_sysconfdir}/%{name}/sentinel.conf
+  mv %{_sysconfdir}/redis-sentinel.conf %{_sysconfdir}/redis/sentinel.conf
 fi
-%systemd_post %{name}.service
-%systemd_post %{name}-sentinel.service
+%systemd_post redis.service
+%systemd_post redis-sentinel.service
 
 %preun
-%systemd_preun %{name}.service
-%systemd_preun %{name}-sentinel.service
+%systemd_preun redis.service
+%systemd_preun redis-sentinel.service
 
 %postun
-%systemd_postun_with_restart %{name}.service
-%systemd_postun_with_restart %{name}-sentinel.service
+%systemd_postun_with_restart redis.service
+%systemd_postun_with_restart redis-sentinel.service
 
 %files
 %{!?_licensedir:%global license %%doc}
@@ -259,43 +258,46 @@ fi
 %license COPYRIGHT-lua
 %license COPYING-jemalloc
 %license COPYING-hiredis
-%config(noreplace) %{_sysconfdir}/logrotate.d/%{name}
-%attr(0750, redis, root) %dir %{_sysconfdir}/%{name}
-%attr(0640, redis, root) %config(noreplace) %{_sysconfdir}/%{name}/%{name}.conf
-%attr(0640, redis, root) %config(noreplace) %{_sysconfdir}/%{name}/sentinel.conf
-%dir %attr(0750, redis, redis) %{_libdir}/%{name}
+%config(noreplace) %{_sysconfdir}/logrotate.d/redis
+%attr(0750, redis, root) %dir %{_sysconfdir}/redis
+%attr(0640, redis, root) %config(noreplace) %{_sysconfdir}/redis/redis.conf
+%attr(0640, redis, root) %config(noreplace) %{_sysconfdir}/redis/sentinel.conf
+%dir %attr(0750, redis, redis) %{_libdir}/redis
 %dir %attr(0750, redis, redis) %{redis_modules_dir}
-%dir %attr(0750, redis, redis) %{_sharedstatedir}/%{name}
-%dir %attr(0750, redis, redis) %{_localstatedir}/log/%{name}
+%dir %attr(0750, redis, redis) %{_sharedstatedir}/redis
+%dir %attr(0750, redis, redis) %{_localstatedir}/log/redis
 %exclude %{macrosdir}
 %exclude %{_includedir}
-%exclude %{_docdir}/%{name}/*
-%{_bindir}/%{name}-*
-%{_libexecdir}/%{name}-*
-%{_mandir}/man1/%{name}*
-%{_mandir}/man5/%{name}*
-%{_unitdir}/%{name}.service
-%{_unitdir}/%{name}-sentinel.service
-%dir %{_sysconfdir}/systemd/system/%{name}.service.d
-%config(noreplace) %{_sysconfdir}/systemd/system/%{name}.service.d/limit.conf
-%dir %{_sysconfdir}/systemd/system/%{name}-sentinel.service.d
-%config(noreplace) %{_sysconfdir}/systemd/system/%{name}-sentinel.service.d/limit.conf
-%dir %attr(0755, redis, redis) %ghost %{_localstatedir}/run/%{name}
+%exclude %{_docdir}/redis/*
+%{_bindir}/redis-*
+%{_libexecdir}/redis-*
+%{_mandir}/man1/redis*
+%{_mandir}/man5/redis*
+%{_unitdir}/redis.service
+%{_unitdir}/redis-sentinel.service
+%dir %{_sysconfdir}/systemd/system/redis.service.d
+%config(noreplace) %{_sysconfdir}/systemd/system/redis.service.d/limit.conf
+%dir %{_sysconfdir}/systemd/system/redis-sentinel.service.d
+%config(noreplace) %{_sysconfdir}/systemd/system/redis-sentinel.service.d/limit.conf
+%dir %attr(0755, redis, redis) %ghost %{_localstatedir}/run/redis
 
 %files devel
 # main package is not required
 %license COPYING
-%{_includedir}/%{name}module.h
+%{_includedir}/redismodule.h
 %{macrosdir}/*
 
 %files doc
 # specific for documentation (CC-BY-SA)
 %license doc/LICENSE
-%docdir %{_docdir}/%{name}
-%{_docdir}/%{name}
+%docdir %{_docdir}/redis
+%{_docdir}/redis
 
 
 %changelog
+* Tue Jan  25 2022 Sumit Garg <sumitgarg44@gmail.com> - 6.2.6-3
+- Port from Fedora to IUS
+
 * Wed Nov  3 2021 Remi Collet <remi@remirepo.net> - 6.2.6-2
 - use proper license in dec/devel sub-packages
 
