@@ -19,7 +19,7 @@
 %global macrosdir %(d=%{_rpmconfigdir}/macros.d; [ -d $d ] || d=%{_sysconfdir}/rpm; echo $d)
 
 Name:              redis6
-Version:           6.2.6
+Version:           6.2.7
 Release:           3%{?dist}
 Summary:           A persistent key-value database
 # redis, jemalloc, linenoise, lzf, hiredis are BSD
@@ -295,6 +295,9 @@ fi
 
 
 %changelog
+* Fri May  13 2022 Jakub Bartak <jbartak@qualityunit.com> - 6.2.7-1
+- Upstream 6.2.7 release.
+
 * Tue Jan  25 2022 Sumit Garg <sumitgarg44@gmail.com> - 6.2.6-3
 - Port from Fedora to IUS
 
